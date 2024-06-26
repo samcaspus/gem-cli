@@ -6,7 +6,7 @@ A command line executer for ai based command execution
 
 
 ```shell
-export CMD_ALIAS=<name_alias> && go install github.com/samcaspus/gem-cli@latest && mv $GOPATH/bin/gem-cli $GOPATH/bin/$CMD_ALIAS
+export CMD_ALIAS=<name_alias> && go install github.com/samcaspus/gem-cli@main && mv $GOPATH/bin/gem-cli $GOPATH/bin/$CMD_ALIAS
 ```
 
 Replace <name_alias> with your preferred cli name
