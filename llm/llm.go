@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/google/generative-ai-go/genai"
 	"github.com/samcaspus/gem-cli/iooperations"
@@ -34,8 +35,10 @@ func ExecuteCommand(retry int, args []string) {
 	ctx, model, client := GetGeminiModel()
 	defer client.Close()
 
-	resp, err := model.GenerateContent(ctx, genai.Text(
-		"Write a command for the query for mac which will be a terminal based command on execution will generate the output as expected and only send the command as response, make sure not to send anything extra including intendation it should just be the command. give the output in json format {'message':'<ai generated message on what the command will do>', 'command': 'actual command here'}, the query is "+executionQuery))
+	// prompt to generate and get response as follows {'message':'<ai generated message on what the command will do>', 'command': 'actual command here'}
+	prompt := "generate a command and fill it inside response for this json {'message':'<ai generated message on what the command will do>', 'command': 'actual command here'} and return only json back no additonal data. The query is " + executionQuery
+
+	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
 		ExecuteCommand(retry-1, args)
 	}
@@ -56,12 +59,19 @@ func ExecuteCommand(retry int, args []string) {
 
 func GetResponse(resp *genai.GenerateContentResponse) LlmResponse {
 	var result LlmResponse
+	fmt.Println("response ")
 	for _, part := range resp.Candidates[0].Content.Parts {
 		if txt, ok := part.(genai.Text); ok {
-			if err := json.Unmarshal([]byte(txt), &result); err != nil {
+			response_text := string(txt)
+			response_text = strings.ReplaceAll(response_text, "```", "")
+			response_text = strings.ReplaceAll(response_text, "json", "")
+			response_text = strings.TrimSpace(response_text)
+			fmt.Println(response_text)
+			if err := json.Unmarshal([]byte(response_text), &result); err != nil {
 				log.Fatal(err)
 			}
 		}
 	}
+
 	return result
 }
