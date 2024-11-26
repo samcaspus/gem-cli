@@ -66,7 +66,6 @@ func GetResponse(resp *genai.GenerateContentResponse) LlmResponse {
 			response_text = strings.ReplaceAll(response_text, "```", "")
 			response_text = strings.ReplaceAll(response_text, "json", "")
 			response_text = strings.TrimSpace(response_text)
-			fmt.Println(response_text)
 			if err := json.Unmarshal([]byte(response_text), &result); err != nil {
 				log.Fatal(err)
 			}
