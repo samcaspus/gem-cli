@@ -2,14 +2,14 @@
 A command line executer for ai based command execution
 
 
-<!-- # To install the Cli 
+# To install the Cli 
 
 
 ```shell
 export CMD_ALIAS=<name_alias> && go install github.com/samcaspus/gem-cli@main && mv $GOPATH/bin/gem-cli $GOPATH/bin/$CMD_ALIAS
-``` -->
+```
 
-# To install the CLI (Modified including almost every major linux distros like fedora, ubuntu or Arch)
+# If error occurs while installation then try this
 
 ```shell
 export CMD_ALIAS=<name_alias> && go install github.com/samcaspus/gem-cli@latest && sudo mv $(go env GOPATH)/bin/gem-cli /usr/local/bin/$CMD_ALIAS
